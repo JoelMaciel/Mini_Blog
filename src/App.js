@@ -7,6 +7,8 @@ import Navbar from "./components/Navbar";
 import { AuthProvider } from "./context/AuthContenxt";
 import { useAuthentication } from "./hooks/useAuthentication";
 import About from "./pages/About/About";
+import CreatePost from "./pages/CreatePost/CreatePost";
+import Dashboard from "./pages/Dashboard/Dashboard";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
@@ -29,7 +31,7 @@ function App() {
 
   return (
     <div className="App">
-      <AuthProvider value={{user}}>
+      <AuthProvider value={{ user }}>
         <BrowserRouter>
           <Navbar />
           <div className="container">
@@ -38,6 +40,8 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/post/create" element={<CreatePost />} />
+              <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
           </div>
           <Footer />
