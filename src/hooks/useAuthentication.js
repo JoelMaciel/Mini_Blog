@@ -3,6 +3,7 @@ import { db } from "../firebase/config";
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  signOut,
   updateProfile,
 } from "firebase/auth";
 
@@ -47,13 +48,18 @@ export const useAuthentication = () => {
       } else {
         systemErrorMessage = "Ocorreu um erro , tente mais tarde";
       }
-      setLoading(false)
+      setLoading(false);
       setError(systemErrorMessage);
     }
   };
+  const logout = () => {
+    checkIfCancelled();
+    signOut(auth);
+  };
+
   useEffect(() => {
     return () => setCancelled(true);
   }, []);
 
-  return { auth, createUser, error, loading };
+  return { auth, createUser, error, loading, logout };
 };
