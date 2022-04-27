@@ -1,15 +1,30 @@
 import React, { useState } from "react";
+import { useInsertDocument } from "../../hooks/useInsertDocument";
 import styles from "./CreatePost.module.css";
+import { useAuthValue } from "../../context/AuthContext";
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [body, setBody] = useState("");
   const [tags, setTags] = useState("");
-  const [formError, setError] = useState("");
+  const [formError, setFormError] = useState("");
+
+  const { insertDocument, response } = useInsertDocument("posts");
+  const { user } = useAuthValue();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setFormError("");
+
+    insertDocument({
+      title,
+      image,
+      body,
+      tags,
+      uid: user.uid,
+      createdBy: user.displayName,
+    });
   };
 
   return (
@@ -60,11 +75,15 @@ const CreatePost = () => {
             value={tags}
           />
         </label>
-        <button className="btn">Cadastrar</button>
-        {/* {!loading && <button className="btn">Cadastrar</button>}
-        {loading && <button className="btn" disabled>Aguarde...</button>}
-        
-        {error && <p className="error">{error}</p>} */}
+
+        {!response.loading && <button className="btn">Cadastrar</button>}
+        {response.loading && (
+          <button className="btn" disabled>
+            Aguarde...
+          </button>
+        )}
+
+        {response.error && <p className="error">{response.error}</p>}
       </form>
     </div>
   );

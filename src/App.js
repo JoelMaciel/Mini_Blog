@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
-import { AuthProvider } from "./context/AuthContenxt";
+import { AuthProvider } from "./context/AuthContext";
 import { useAuthentication } from "./hooks/useAuthentication";
 import About from "./pages/About/About";
 import CreatePost from "./pages/CreatePost/CreatePost";
