@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useInsertDocument } from "../../hooks/useInsertDocument";
 import styles from "./CreatePost.module.css";
 import { useAuthValue } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -13,18 +14,35 @@ const CreatePost = () => {
   const { insertDocument, response } = useInsertDocument("posts");
   const { user } = useAuthValue();
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormError("");
+
+    try {
+      new URL(image);
+    } catch (error) {
+      setFormError("A imagem precisa ser uma URL válida.");
+    }
+
+    const tagsArray = tags.split(",").map((tag) => tag.trim().toLowerCase());
+
+    if (!title || !image || !tags || !body) {
+      setFormError("Por favor corriga todos os campos");
+    }
+
+    if (formError) return;
 
     insertDocument({
       title,
       image,
       body,
-      tags,
+      tagsArray,
       uid: user.uid,
       createdBy: user.displayName,
     });
+    navigate("/")
   };
 
   return (
@@ -84,6 +102,7 @@ const CreatePost = () => {
         )}
 
         {response.error && <p className="error">{response.error}</p>}
+        {formError && <p className="error">{formError}</p>}
       </form>
     </div>
   );
